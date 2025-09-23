@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const apiInstance = axios.create({
-    baseURL: "http://localhost:8081",
+    baseURL: "https://blogproject-mernstack-2.onrender.com",
     withCredentials: true 
 })
 
