@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema({
         type:String
     }
 
-},{timestamp: true})
+},{timestamps: true})
 
 const UserData = mongoose.model('UserData', userSchema)
 module.exports = UserData

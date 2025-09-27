@@ -10,6 +10,7 @@ import MyBlogs from './pages/MyBlogs'
 import BlogDetails from './pages/BlogDetails'
 import Categories from './pages/Categories'
 import Blogs from './pages/Blogs'
+import About from './pages/About'
 
 const App = () => {
 
@@ -29,6 +30,7 @@ const App = () => {
         <Route path='/BlogDetails/:id' element={<BlogDetails />} />
         <Route path='/Categories' element={<Categories />} />
         <Route path='/Blogs' element={<Blogs />} />
+        <Route path='/About' element={<About />} />
       </Routes>
     </>
   )

@@ -1,16 +1,16 @@
 const { Router } = require('express')
 const router = Router()
-const { signUpProcess, loginProcess, checkAuth } = require('../controllers/authcontrollers')
+const authCtl = require('../controllers/authcontrollers')
 const passport = require('../middleware/passport')
 const imageUploads = require('../middleware/imageUploads')
 const blogCtl  = require('../controllers/blogcontrollers')
-const { getComments, addCommentProcess, deleteCommentProcess, editCommentProcess } = require('../controllers/commentcontrollers')
+const commentCtl = require('../controllers/commentcontrollers')
 
 // ============= AUTHENTICATION =============== //
 
-router.post('/signUp', signUpProcess)
-router.post('/login', passport.authenticate('local'), loginProcess)
-router.get('/checkAuth',passport.userAuth, checkAuth)
+router.post('/signUp', authCtl.signUpProcess)
+router.post('/login', passport.authenticate('local'), authCtl.loginProcess)
+router.get('/checkAuth',passport.userAuth, authCtl.checkAuth)
 
 // =============== BLOGS ================ //
 
@@ -22,9 +22,9 @@ router.put('/editBlog/:id',passport.userAuth,imageUploads, blogCtl.editBlogProce
 
 // ================== COMMENTS =============== //
 
-router.get('/getComments/:id', getComments)
-router.post('/createComment/:id',passport.userAuth, addCommentProcess)
-router.delete('/deleteComment/:id', deleteCommentProcess)
-router.put('/editcomment/:id', editCommentProcess)
+router.get('/getComments/:id', commentCtl.getComments)
+router.post('/createComment/:id',passport.userAuth, commentCtl.addCommentProcess)
+router.delete('/deleteComment/:id', commentCtl.deleteCommentProcess)
+router.put('/editcomment/:id', commentCtl.editCommentProcess)
 
 module.exports = router
