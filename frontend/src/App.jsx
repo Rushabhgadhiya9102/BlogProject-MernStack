@@ -11,6 +11,7 @@ import BlogDetails from './pages/BlogDetails'
 import Categories from './pages/Categories'
 import Blogs from './pages/Blogs'
 import About from './pages/About'
+import EditProfile from './pages/EditProfile'
 
 const App = () => {
 
@@ -31,6 +32,7 @@ const App = () => {
         <Route path='/Categories' element={<Categories />} />
         <Route path='/Blogs' element={<Blogs />} />
         <Route path='/About' element={<About />} />
+        <Route path='/EditProfile' element={<EditProfile />} />
       </Routes>
     </>
   )

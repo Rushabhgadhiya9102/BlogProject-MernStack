@@ -1,18 +1,40 @@
-import React from "react";
-import bgGradient2 from "../assets/images/bg-gradient-2.png";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import React, { useEffect } from 'react';
+import bgGradient2 from '../assets/images/bg-gradient-2.png';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import Header from '../components/Header';
+import { checkAuth } from '../thunk/authThunk';
+import { getBlogData } from '../thunk/blogThunk';
+import { setSelectedProfile } from '../features/profileSlice';
+import { getProfileData } from '../thunk/editProfileThunk';
+import defaultImage from '../assets/images/default-avatar.jpg'
 
 const About = () => {
-  const { users } = useSelector((state) => state.auth);
-  const { blogs } = useSelector((state) => state.blog);
-  const uniqueCategories = [
-    ...new Set(blogs.map((blog) => blog.category).filter(Boolean)),
-  ];
-  const myBlogs = blogs.filter((blog) => blog.author._id === users._id);
+  const { users } = useSelector(state => state.auth);
+  const { blogs } = useSelector(state => state.blog);
+  const { profile } = useSelector(state => state.profile);
+  const uniqueCategories = [...new Set(blogs.map(blog => blog.category).filter(Boolean))];
+  const myBlogs = blogs.filter(blog => blog.author._id === users._id);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(checkAuth());
+    dispatch(getBlogData());
+
+    if(users?._id){
+        dispatch(getProfileData(users._id));
+    }
+  }, [dispatch,users._id]);
+
+  const handleEdit = (profile)=>{
+        dispatch(setSelectedProfile(profile))
+        
+      }
+  
 
   return (
     <>
+      <Header />
       <section
         className="bg-indigo-950 min-h-screen flex flex-col bg-cover bg-no-repeat"
         style={{ backgroundImage: `url(${bgGradient2})` }}
@@ -24,7 +46,7 @@ const About = () => {
             {/* Cover Image */}
 
             <img
-              src="<%= user.coverImage || '../../images/cover-image.png' %>"
+              src=""
               alt="Cover Image"
               className="w-full h-56 object-cover absolute top-0 left-0 opacity-60 rounded-b-2xl"
             />
@@ -33,7 +55,7 @@ const About = () => {
 
             <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2">
               <img
-                src="<%= user.profileImage || '/images/default-avatar.png' %>"
+                src={profile?.profileImage || defaultImage }
                 alt="Profile"
                 className="w-32 h-32 rounded-full border-4 border-white shadow-lg object-cover"
               />
@@ -45,42 +67,33 @@ const About = () => {
           <div className="flex flex-col items-center mt-20 px-4">
             {/* Name & Tagline */}
 
-            <h2 className="text-3xl font-bold text-white">{users.userName}</h2>
-            <p className="text-white mt-1">{users.email}</p>
+            <h2 className="text-3xl font-bold text-white">{profile?.userName}</h2>
+            <p className="text-white mt-1">{profile?.email}</p>
             <p className="text-gray-400 mt-1">
-              Joined at :{" "}
+              Joined at :{' '}
               {users?.createdAt
-                ? new Date(users.createdAt).toLocaleDateString("en-GB", {
-                    day: "2-digit",
-                    month: "long",
-                    year: "numeric",
+                ? new Date(users.createdAt).toLocaleDateString('en-GB', {
+                    day: '2-digit',
+                    month: 'long',
+                    year: 'numeric'
                   })
-                : "not available"}
+                : 'not available'}
             </p>
 
             {/* About Section */}
 
             <div className="max-w-2xl mt-8 text-center">
-              <h2 className="text-xl font-semibold text-white mb-2">
-                About Me
-              </h2>
-              <p className="leading-relaxed text-gray-400">
-                {users.bio ? users.bio : "No Bio Added"}
-              </p>
+              <h2 className="text-xl font-semibold text-white mb-2">About Me</h2>
+              <p className="leading-relaxed text-gray-400">{users.bio ? users.bio : 'No Bio Added'}</p>
             </div>
 
             {/* Skills / Topics */}
 
             <div className="max-w-2xl mt-6">
-              <h2 className="text-xl font-semibold text-white mb-3 text-center">
-                Topics I Write About
-              </h2>
+              <h2 className="text-xl font-semibold text-white mb-3 text-center">Topics I Write About</h2>
               <div className="flex flex-wrap justify-center gap-2">
                 {uniqueCategories.map((category, index) => (
-                  <span
-                    key={index}
-                    className="bg-indigo-800 text-white px-3 py-1 rounded-sm text-sm"
-                  >
+                  <span key={index} className="bg-indigo-800 text-white px-3 py-1 rounded-sm text-sm">
                     {category}
                   </span>
                 ))}
@@ -90,18 +103,16 @@ const About = () => {
             {/* Recent Blogs */}
 
             <div className="max-w-4xl w-full mt-10">
-              <h2 className="text-xl font-semibold text-white mb-5 text-center">
-                Recent Blogs
-              </h2>
+              <h2 className="text-xl font-semibold text-white mb-5 text-center">Recent Blogs</h2>
               <div className="grid md:grid-cols-2 gap-6">
                 {myBlogs.length > 0 ? (
                   myBlogs.slice(0, 6).map((blog, index) => {
                     const { blogCoverImage, _id, title, category } = blog;
 
                     return (
-                      <div className="category-item h-50 overflow-hidden rounded-4xl">
+                      <div key={index} className="category-item h-50 overflow-hidden rounded-4xl">
                         <div className="card relative hover:scale-102 duration-300 transition-all bg-cover bg-center w-full h-full">
-                          <img src={ blogCoverImage?.url } className="w-full h-full" alt="blog-image" />
+                          <img src={blogCoverImage?.url} className="w-full h-full" alt="blog-image" />
                           <div className="absolute top-0 bottom-0 left-0 right-0">
                             <div className="w-full h-full flex items-end bg-gradient-to-t from-black to-transparent">
                               <div className="content p-5 mx-auto text-center">
@@ -111,9 +122,7 @@ const About = () => {
                                 >
                                   {title}
                                 </Link>
-                                <p className="text-lg font-medium text-gray-500">
-                                  {category}
-                                </p>
+                                <p className="text-lg font-medium text-gray-500">{category}</p>
                               </div>
                             </div>
                           </div>
@@ -129,17 +138,11 @@ const About = () => {
             {/* Contact Button */}
             <div className="mt-10 text-center">
               <div className="flex gap-x-3">
-                <a
-                  href="/editProfile"
-                  className="bg-indigo-600 rounded-md py-1.5 px-7 text-white"
-                >
+                <Link to="/EditProfile" onClick={()=>handleEdit(users)} className="bg-indigo-600 rounded-md py-1.5 px-7 text-white">
                   Edit
-                </a>
+                </Link>
                 <span className="border-r border-gray-600" />
-                <a
-                  href="/logout"
-                  className="bg-red-600 rounded-md py-1.5 px-3 text-white"
-                >
+                <a href="/logout" className="bg-red-600 rounded-md py-1.5 px-3 text-white">
                   Logout
                 </a>
               </div>

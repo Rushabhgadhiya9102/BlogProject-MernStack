@@ -10,6 +10,7 @@ import { addComment, getCommentData, deleteComment, editComment } from "../thunk
 import { FaTrashAlt } from "react-icons/fa";
 import { HiPencilSquare } from "react-icons/hi2"
 import { clearSelectedComment, setSelectedComment } from "../features/commentSlice";
+import defaultImage from '../assets/images/default-avatar.jpg'
 
 const BlogDetails = () => {
     
@@ -235,7 +236,7 @@ const BlogDetails = () => {
                         <div className="flex items-center gap-2 ">
                           <img
                             className="h-8 w-8 rounded-full"
-                            src="{ val.author.profileImage || '../../images/default-avatar.jpg' }"
+                            src={ val.author.profileImage || defaultImage }
                             alt="userImage1"
                           />
                           <p className="text-white font-medium">

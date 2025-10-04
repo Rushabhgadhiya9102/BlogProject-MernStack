@@ -3,6 +3,7 @@ import Logo from "../assets/images/logo.png";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { IoPersonCircleSharp } from "react-icons/io5";
+import defaultImage from '../assets/images/default-avatar.jpg'
 
 const Header = () => {
   const { users } = useSelector((state) => state.auth);
@@ -55,7 +56,7 @@ const Header = () => {
                   {users && users.profileImage ? (
                     <img
                       className="inline-block shrink-0 size-7.5 rounded-full"
-                      src={null}
+                      src={users.profileImage || defaultImage}
                       alt="Avatar"
                     />
                   ) : (
