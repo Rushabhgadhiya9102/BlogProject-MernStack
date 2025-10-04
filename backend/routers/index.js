@@ -5,6 +5,7 @@ const passport = require('../middleware/passport')
 const imageUploads = require('../middleware/imageUploads')
 const blogCtl  = require('../controllers/blogcontrollers')
 const commentCtl = require('../controllers/commentcontrollers')
+const ProfilerCtl = require('../controllers/editProfiecontrollers')
 
 // ============= AUTHENTICATION =============== //
 
@@ -26,5 +27,10 @@ router.get('/getComments/:id', commentCtl.getComments)
 router.post('/createComment/:id',passport.userAuth, commentCtl.addCommentProcess)
 router.delete('/deleteComment/:id', commentCtl.deleteCommentProcess)
 router.put('/editcomment/:id', commentCtl.editCommentProcess)
+
+// ================== EDIT PROFILE ================== //
+
+router.get('/getProfile/:id', ProfilerCtl.getProfile)
+router.put('/editProfile/:id',imageUploads, ProfilerCtl.updateProfile)
 
 module.exports = router
